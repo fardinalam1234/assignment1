@@ -14,7 +14,7 @@ import jakarta.ws.rs.core.Response;
 @Path("/spam")
 public class SpamResource {
 
-//    your SpamDetector Class responsible for all the SpamDetecting logic
+    //    your SpamDetector Class responsible for all the SpamDetecting logic
     SpamDetector detector = new SpamDetector();
 
 
@@ -23,6 +23,7 @@ public class SpamResource {
         System.out.print("Training and testing the model, please wait");
 
 //      TODO: call  this.trainAndTest();
+        trainAndTest();
 
 
     }
@@ -30,15 +31,20 @@ public class SpamResource {
     @Produces("application/json")
     public Response getSpamResults() {
 //       TODO: return the test results list of TestFile, return in a Response object
+        List<TestFile> results = detector.getTestResults();
+        return Response.ok().entity(results).build();
 
         return null;
     }
 
     @GET
     @Path("/accuracy")
-    @Produces("application/json")
+    @Produces("application/json") 
     public Response getAccuracy() {
 //      TODO: return the accuracy of the detector, return in a Response object
+        // return the accuracy of the detector, return in a Response object
+        double accuracy = detector.getAccuracy();
+        return Response.ok().entity("{\"accuracy\": " + accuracy + "}").build();
 
         return null;
     }
@@ -47,9 +53,13 @@ public class SpamResource {
     @Path("/precision")
     @Produces("application/json")
     public Response getPrecision() {
-       //      TODO: return the precision of the detector, return in a Response object
+        //TODO: return the precision of the detector, return in a Response object
+        // return the precision of the detector, return in a Response object
+        // filling in according to instructions
+        double precision = detector.getPrecision();
+        return Response.ok().entity("{\"precision\": " + precision + "}").build();
 
-        return null;
+        //return null;
     }
 
     private List<TestFile> trainAndTest()  {
@@ -58,7 +68,8 @@ public class SpamResource {
         }
 
 //        TODO: load the main directory "data" here from the Resources folder
-        File mainDirectory = null;
+        File mainDirectory = new File(getClass().getClassLoader().getResource("data").getFile());
+        //File mainDirectory = null;
         return this.detector.trainAndTest(mainDirectory);
     }
 }
